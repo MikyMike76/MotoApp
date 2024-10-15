@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MotoApp.Entities;
+﻿using MotoApp.Entities;
 
 namespace MotoApp.Repositories
 {
-    public class GenericRepository<T, Tkey> where T : IEntity
+    public class GenericRepository<T> 
+        where T : class, IEntity, new()
     {
-        public Tkey? key { get; set; }
         protected readonly List<T> _items = new();
+        public T GetById(int id)
+        {
+            return _items.Single(item => item.Id == id);
+        }
         public void Add(T item)
         {
             item.Id = _items.Count + 1;
@@ -23,10 +22,9 @@ namespace MotoApp.Repositories
                 Console.WriteLine(item);
             }
         }
-        public T GetById(int id)
+        public void Remove(T item)
         {
-            return _items.Single(item => item.Id == id);
+            _items.Remove(item);
         }
-
     }
 }
