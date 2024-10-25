@@ -2,34 +2,37 @@
 using MotoApp.Repositories;
 using MotoApp.Entities;
 using MotoApp.Data;
+using MotoApp.Repositories.Extensions;
 
-var employeeRepository = new SqlRepository<Employee>(new MotoAppDbContext());
-AddManagers(employeeRepository);
-WriteAllToConsole(employeeRepository);
+var itemAdded = new ItemAdded(EmployeeAdded); 
+var employeeRepository = new SqlRepository<Employee>(new MotoAppDbContext(), itemAdded);
+var itemAdded1 = new ItemAdded(BusinessPartnerAdded);
+var businessPartnersRepository = new SqlRepository<BusinessPartner>(new MotoAppDbContext(), itemAdded1);
 
-static void AddBatch<T>(IRepository<T> repository, T[] items)
-    where T : class, IEntity
+static void EmployeeAdded(object item)
 {
-    foreach (var item in items)
-    {
-        repository.Add(item);
-    }
-    repository.Save();
+    var employee = (Employee)item;
+    Console.WriteLine($"{employee.FirstName} added");
+}
+static void BusinessPartnerAdded(object item)
+{
+    var employee = (BusinessPartner)item;
+Console.WriteLine($"{employee.Name} added");
 }
 var employees = new[]
 {
     new Employee { FirstName = "Adam" },
-    new Employee { FirstName = "Adam" },
-    new Employee { FirstName = "Adam" },
+    new Employee { FirstName = "Adrian" },
+    new Employee { FirstName = "Zuzia" },
 
 };
-AddBatch<Employee>(employeeRepository, employees);
-static void AddManagers(IWriteRepository<Manager> menagerRepository)
+employeeRepository.AddBatch(employees);
+var businessPartners = new[]
 {
-    menagerRepository.Add(new Manager { FirstName = "Przemek" });
-    menagerRepository.Add(new Manager { FirstName = "Tomek" });
-    menagerRepository.Save();
-}
+    new BusinessPartner { Name = "Przemek" },
+    new BusinessPartner { Name = "Tomek" }
+};
+businessPartnersRepository.AddBatch(businessPartners);
 static void WriteAllToConsole(IReadRepository<IEntity> repository)
 {
     var items = repository.GetAll();
@@ -38,3 +41,5 @@ static void WriteAllToConsole(IReadRepository<IEntity> repository)
         Console.WriteLine(item);
     }
 }
+WriteAllToConsole(employeeRepository);
+WriteAllToConsole(businessPartnersRepository);
