@@ -4,42 +4,43 @@ using MotoApp.Entities;
 using MotoApp.Data;
 using MotoApp.Repositories.Extensions;
 
-var itemAdded = new ItemAdded(EmployeeAdded); 
-var employeeRepository = new SqlRepository<Employee>(new MotoAppDbContext(), itemAdded);
+var employeeRepository = new SqlRepository<Employee>(new MotoAppDbContext(), EmployeeAdded);
+employeeRepository.itemAdded += OnItemAdded;
 AddEmployees(employeeRepository);
-var itemAdded1 = new ItemAdded(BusinessPartnerAdded);
-var businessPartnersRepository = new SqlRepository<BusinessPartner>(new MotoAppDbContext(), itemAdded1);
+var businessPartnersRepository = new SqlRepository<BusinessPartner>(new MotoAppDbContext(), BusinessPartnerAdded);
 AddBusinessPartner(businessPartnersRepository);
 
-static void EmployeeAdded(object item)
+static void OnItemAdded(object? sender, Employee e)
 {
-    var employee = (Employee)item;
-    Console.WriteLine($"{employee.FirstName} added");
+    Console.WriteLine($"Employee {e.FirstName} added from {sender?.GetType().Name}");
 }
-static void BusinessPartnerAdded(object item)
+static void EmployeeAdded(Employee item)
 {
-    var employee = (BusinessPartner)item;
-Console.WriteLine($"{employee.Name} added");
+    Console.WriteLine($"{item.FirstName} added");
+}
+static void BusinessPartnerAdded(BusinessPartner item)
+{
+    Console.WriteLine($"{item.Name} added");
 }
 
 static void AddEmployees(IRepository<Employee> employeeRepository)
 {
     var employees = new[]
-{
+    {
     new Employee { FirstName = "Adam" },
     new Employee { FirstName = "Adrian" },
     new Employee { FirstName = "Zuzia" },
 
-};
+    };
     employeeRepository.AddBatch(employees);
 }
 static void AddBusinessPartner(IRepository<BusinessPartner> businessPartnersRepository)
 {
     var businessPartners = new[]
-{
+    {
     new BusinessPartner { Name = "Przemek" },
     new BusinessPartner { Name = "Tomek" }
-};
+    };
     businessPartnersRepository.AddBatch(businessPartners);
 }
 

@@ -3,14 +3,15 @@ using MotoApp.Entities;
 
 namespace MotoApp.Repositories
 {
-    public delegate void ItemAdded(object item);
+    //public delegate void ItemAdded<T>(T item);
     public class SqlRepository <T> : IRepository<T> where T : class, IEntity, new()
     {
         private readonly DbSet<T> _dbSet;
         private readonly DbContext _dbContext;
-        private readonly ItemAdded _itemAddedCallBack;
+        private readonly Action<T>? _itemAddedCallBack;
+        public EventHandler<T>? itemAdded;
 
-        public SqlRepository(DbContext dbContext, ItemAdded? itemAddedCallBack = null)
+        public SqlRepository(DbContext dbContext, Action<T>? itemAddedCallBack = null)
         {
             _dbContext = dbContext;
             _dbSet = dbContext.Set<T>();
@@ -20,14 +21,15 @@ namespace MotoApp.Repositories
         {
             return _dbSet.ToList();
         }
-        public T GetById (int id)
+        public T? GetById (int id)
         {
             return _dbSet.Find(id);
         }
         public void Add (T item)
         {
             _dbSet.Add(item);
-            _itemAddedCallBack.Invoke(item);
+            _itemAddedCallBack?.Invoke(item);
+            itemAdded?.Invoke(this, item);
         }
         public void Remove (T item)
         {
