@@ -5,14 +5,19 @@ using MotoApp.Data;
 using MotoApp.Repositories.Extensions;
 
 var employeeRepository = new SqlRepository<Employee>(new MotoAppDbContext(), EmployeeAdded);
-employeeRepository.itemAdded += OnItemAdded;
+employeeRepository.itemAdded += OnEmployeeAdded;
 AddEmployees(employeeRepository);
 var businessPartnersRepository = new SqlRepository<BusinessPartner>(new MotoAppDbContext(), BusinessPartnerAdded);
+businessPartnersRepository.itemAdded += OnBusinessPartnerAdded;
 AddBusinessPartner(businessPartnersRepository);
 
-static void OnItemAdded(object? sender, Employee e)
+static void OnEmployeeAdded(object? sender, Employee e)
 {
-    Console.WriteLine($"Employee {e.FirstName} added from {sender?.GetType().Name}");
+    Console.WriteLine($"Employee {e.FirstName} added from {sender?.GetType()}");
+}
+static void OnBusinessPartnerAdded(object? sender, BusinessPartner e)
+{
+    Console.WriteLine($"BusinessPartner {e.Name} added from {sender?.GetType()}");
 }
 static void EmployeeAdded(Employee item)
 {
