@@ -2,7 +2,7 @@
 
 namespace MotoApp.Repositories
 {
-    public class ListRepository<T> 
+    public class ListRepository<T> : IRepository<T>
         where T : class, IEntity, new()
     {
         protected readonly List<T> _items = new();
@@ -22,6 +22,11 @@ namespace MotoApp.Repositories
         public void Remove(T item)
         {
             _items.Remove(item);
+        }
+
+        public void Save()
+        {
+            throw new NotImplementedException();
         }
     }
 }
