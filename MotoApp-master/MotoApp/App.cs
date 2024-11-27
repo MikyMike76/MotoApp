@@ -32,7 +32,7 @@ namespace MotoApp
             {
                 _employeeRepository.Add(employee);
             }
-            _employeeRepository.Save();
+            //_employeeRepository.Save();
 
             // reading
             var items = _employeeRepository.GetAll();
@@ -48,7 +48,7 @@ namespace MotoApp
                 _carsRepository.Add(car);
             }
 
-            foreach (var car in _carsProvider.FilterCars(1000))
+            foreach (var car in _carsProvider.GetUniqueCarColors())
             {
                 Console.WriteLine(car);
             }

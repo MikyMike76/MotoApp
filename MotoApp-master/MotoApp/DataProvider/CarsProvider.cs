@@ -1,6 +1,6 @@
 ﻿using MotoApp.Entities;
 using MotoApp.Repositories;
-using System.Linq;
+using System.Text;
 
 namespace MotoApp.DataProvider
 {
@@ -14,28 +14,48 @@ namespace MotoApp.DataProvider
 
         public string AnonymousClass()
         {
-            throw new NotImplementedException();
-        }
+            var cars = _carsRepository.GetAll();
+            var list = cars.Select(car => new
+            {
+                Identifier = car.Id,
+                ProductName = car.Name,
+                ProductType = car.Type,
+            });
 
-        public List<Car> FilterCars(decimal minPrice)
-        {
-            throw new NotImplementedException();
+            StringBuilder sb = new StringBuilder(2048);
+            foreach (var car in list)
+            {
+                sb.AppendLine($"Product ID: {car.Identifier}");
+                sb.AppendLine($"Product Name: {car.ProductName}");
+                sb.AppendLine($"Product Size: {car.ProductType}");
+            }
+
+            return sb.ToString();
         }
 
         public decimal GetMinimumPriceOfAllCars()
         {
-            throw new NotImplementedException();
+            var cars = _carsRepository.GetAll();
+            return cars.Select(car => car.ListPrice).Min();
         }
 
         public List<Car> GetSpicificColumns()
         {
-            throw new NotImplementedException();
+            var cars = _carsRepository.GetAll();
+            var list = cars.Select(car => new Car
+            {
+                Id = car.Id,
+                Name = car.Name,
+                Type = car.Type,
+            }).ToList();
+            return list;
         }
 
         public List<string> GetUniqueCarColors()
         {
-            var cars = _carsRepository;
-            var colors = cars.Select (x => x.CarColor).Distinct();
+            var cars = _carsRepository.GetAll();
+            var colors = cars.Select(car => car.Color).Distinct().ToList();
+            return colors;
         }
     }
 }
