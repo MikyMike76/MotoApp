@@ -1,4 +1,5 @@
-﻿using MotoApp.Entities;
+﻿using MotoApp.DataProvider;
+using MotoApp.Entities;
 using MotoApp.Repositories;
 
 namespace MotoApp
@@ -6,12 +7,20 @@ namespace MotoApp
     public class App : IApp
     {
         private readonly IRepository<Employee> _employeeRepository;
-        public App(IRepository<Employee> employeeRepository)
+        private readonly IRepository<Car> _carsRepository;
+        private readonly ICarsProvider _carsProvider;
+        public App(
+            IRepository<Employee> employeesRepository, 
+            IRepository<Car> carsRepository,
+            ICarsProvider carsProvider)
         {
-            _employeeRepository = employeeRepository;
+            _employeeRepository = employeesRepository;
+            _carsRepository = carsRepository;
+            _carsProvider = carsProvider;
         }
         public void Run()
         {
+            // adding
             Console.WriteLine("I'm here in Run() method");
             var employees = new[]
             {
@@ -24,6 +33,67 @@ namespace MotoApp
                 _employeeRepository.Add(employee);
             }
             _employeeRepository.Save();
+
+            // reading
+            var items = _employeeRepository.GetAll();
+            foreach (var item in items)
+            {
+                Console.WriteLine(item);
+            }
+
+            // cars
+            var cars = GenerateSampleCars();
+            foreach (var car in cars)
+            {
+                _carsRepository.Add(car);
+            }
+
+            foreach (var car in _carsProvider.FilterCars(1000))
+            {
+                Console.WriteLine(car);
+            }
+        }
+        public static List<Car> GenerateSampleCars()
+        {
+            return new List<Car>
+        {
+            new Car
+            {
+                Id = 831,
+                Name = "Car22",
+                Color = "red",
+                StandardCost = 1234m,
+                ListPrice = 2345m,
+                Type = "52"
+            },
+            new Car
+            {
+                Id = 222,
+                Name = "Car21",
+                Color = "green",
+                StandardCost = 443m,
+                ListPrice = 786m,
+                Type = "33"
+            },
+            new Car
+            {
+                Id = 223,
+                Name = "Car23",
+                Color = "black",
+                StandardCost = 654m,
+                ListPrice = 1365m,
+                Type = "11"
+            },
+            new Car
+            {
+                Id = 135,
+                Name = "Car33",
+                Color = "blue",
+                StandardCost = 5000m,
+                ListPrice = 1000m,
+                Type = "23"
+            }
+        };
         }
     }
 }

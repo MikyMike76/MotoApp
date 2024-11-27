@@ -1,12 +1,15 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MotoApp;
+using MotoApp.DataProvider;
 using MotoApp.Entities;
 using MotoApp.Repositories;
 
 var services = new ServiceCollection();
 services.AddSingleton<IApp, App>();
 services.AddSingleton<IRepository<Employee>, ListRepository<Employee>>();
+services.AddSingleton<IRepository<Car>, ListRepository<Car>>();
+services.AddSingleton<ICarsProvider, CarsProvider>();
 var serviceProvider = services.BuildServiceProvider();
 var app = serviceProvider.GetRequiredService<IApp>();
 app.Run();
