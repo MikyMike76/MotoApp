@@ -1,5 +1,6 @@
 ﻿using MotoApp.Entities;
 using MotoApp.Repositories;
+using System.Linq;
 
 namespace MotoApp.DataProvider
 {
@@ -10,6 +11,12 @@ namespace MotoApp.DataProvider
         {
             _carsRepository = carsRepository;
         }
+
+        public string AnonymousClass()
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Car> FilterCars(decimal minPrice)
         {
             throw new NotImplementedException();
@@ -20,9 +27,15 @@ namespace MotoApp.DataProvider
             throw new NotImplementedException();
         }
 
-        public List<string> GetUniqueCarColors()
+        public List<Car> GetSpicificColumns()
         {
             throw new NotImplementedException();
+        }
+
+        public List<string> GetUniqueCarColors()
+        {
+            var cars = _carsRepository;
+            var colors = cars.Select (x => x.CarColor).Distinct();
         }
     }
 }

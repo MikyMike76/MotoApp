@@ -7,5 +7,7 @@ namespace MotoApp.DataProvider
         List<Car> FilterCars(decimal minPrice);
         List<string> GetUniqueCarColors();
         decimal GetMinimumPriceOfAllCars();
+        List<Car> GetSpicificColumns();
+        string AnonymousClass();
     }
 }
