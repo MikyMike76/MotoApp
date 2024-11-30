@@ -52,7 +52,7 @@ namespace MotoApp
             {
                 Console.WriteLine(car);
             }
-            foreach(var car in _carsProvider.OrderByColorAndName())
+            foreach (var car in _carsProvider.OrderByColorAndName())
             {
                 Console.WriteLine(car);
             }
@@ -60,7 +60,25 @@ namespace MotoApp
         public static List<Car> GenerateSampleCars()
         {
             return new List<Car>
-        {
+            {
+            new Car
+            {
+                Id = 1300,
+                Name = "Car212",
+                Color = "green",
+                StandardCost = 3456m,
+                ListPrice = 7000m,
+                Type = "102"
+            },
+            new Car
+            {
+                Id = 1201,
+                Name = "Car112",
+                Color = "red",
+                StandardCost = 333m,
+                ListPrice = 567m,
+                Type = "92"
+            },
             new Car
             {
                 Id = 831,
@@ -77,7 +95,7 @@ namespace MotoApp
                 Color = "red",
                 StandardCost = 900m,
                 ListPrice = 1800m,
-                Type = "52"
+                Type = "72"
             },
             new Car
             {
@@ -115,7 +133,7 @@ namespace MotoApp
                 ListPrice = 1000m,
                 Type = "23"
             }
-        };
+            };
         }
     }
 }
